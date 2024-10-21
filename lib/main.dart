@@ -2,6 +2,7 @@ import 'package:collapsible_sidebar/collapsible_sidebar.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:janssendashboard/CRM/crm.dart';
+import 'package:janssendashboard/CRM/crmProvider.dart';
 import 'package:janssendashboard/foam/customers/Customer_controller.dart';
 import 'package:janssendashboard/foam/foamDashboard.dart';
 import 'package:janssendashboard/foam/widgits/blocks/blockFirebaseController.dart';
@@ -46,6 +47,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => BlockFirebasecontroller(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => CrmProvider(),
         ),
       ],
       child: MaterialApp(

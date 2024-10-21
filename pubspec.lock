@@ -160,6 +160,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  gap:
+    dependency: "direct main"
+    description:
+      name: gap
+      sha256: f19387d4e32f849394758b91377f9153a1b41d79513ef7668c088c77dbc6955d
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.1"
   intl:
     dependency: "direct main"
     description:
@@ -310,10 +318,18 @@ packages:
     source: hosted
     version: "27.1.53"
   syncfusion_flutter_core:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: syncfusion_flutter_core
       sha256: becd190595cba56feac5ec17b805b35df9f006171c131c209f79b5c58fc780eb
+      url: "https://pub.dev"
+    source: hosted
+    version: "27.1.53"
+  syncfusion_flutter_datagrid:
+    dependency: "direct main"
+    description:
+      name: syncfusion_flutter_datagrid
+      sha256: "7a6368b6544c5c1b7ef10ef3483e8a9a1f8c302dc3a9a456036b1f51f09513fc"
       url: "https://pub.dev"
     source: hosted
     version: "27.1.53"

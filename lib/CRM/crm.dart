@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:janssendashboard/CRM/allTickets.dart';
 
 class CrmView extends StatelessWidget {
   const CrmView({super.key});
@@ -129,7 +130,8 @@ class CrmView extends StatelessWidget {
               BlocksStaticks(),
               BlocksStaticks2(),
             ],
-          )
+          ),
+          DataGridForOrder()
         ],
       ),
     );

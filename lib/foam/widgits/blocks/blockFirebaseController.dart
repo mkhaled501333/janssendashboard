@@ -12,7 +12,7 @@ class BlockFirebasecontroller extends ChangeNotifier {
   Map<String, BlockModel> blocks = {};
   Map<String, BlockModel> archived_blocks = {};
   getData() {
-    // blocks_From_firebase();
+    blocks_From_firebase();
   }
 
   blocks_From_firebase() {

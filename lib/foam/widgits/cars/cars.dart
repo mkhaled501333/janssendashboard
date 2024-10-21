@@ -143,7 +143,7 @@ class CartsStatistics extends StatelessWidget {
                                                 fontSize: MediaQuery.of(context)
                                                         .size
                                                         .width *
-                                                    .005,
+                                                    .009,
                                                 fontWeight: FontWeight.bold),
                                           ))
                                       .toList(),
@@ -164,7 +164,7 @@ class CartsStatistics extends StatelessWidget {
                     child: Text(
                       "Total : ${daycars.isEmpty ? 0 : daycars.map((e) => e.totalWeight).reduce(
                             (value, element) => value + element,
-                          )}",
+                          )} kg",
                       style: TextStyle(
                           color: notificationText,
                           fontSize: MediaQuery.of(context).size.width * .01,
