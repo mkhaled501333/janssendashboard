@@ -64,34 +64,36 @@ class DataGridForOrder extends StatelessWidget {
             columns: <GridColumn>[
               GridColumn(
                   allowFiltering: false,
-                  width: 111,
-                  columnName: 'id',
-                  label: Row(
-                    children: [
-                      Text(
-                        'Order No',
+                  width: 70,
+                  columnName: 'ticketnum',
+                  label: ValueListenableBuilder<int>(
+                    valueListenable: counter,
+                    builder: (c, value, _) {
+                      return Text(
+                        ' ticket  Num ($value)',
                         style: textstyle,
-                      ),
-                      const Gap(6),
-                      ValueListenableBuilder<int>(
-                        valueListenable: counter,
-                        builder: (c, value, _) {
-                          return Text(
-                            '($value)',
-                            style: textstyle,
-                          );
-                        },
-                      ),
-                    ],
+                      );
+                    },
                   )),
               GridColumn(
                   allowFiltering: false,
                   allowEditing: true,
                   width: 80,
-                  columnName: 'orderdata',
+                  columnName: 'date',
                   label: Center(
                     child: Text(
-                      ' Date',
+                      ' Date created',
+                      style: textstyle,
+                    ),
+                  )),
+              GridColumn(
+                  allowFiltering: false,
+                  allowEditing: true,
+                  width: 80,
+                  columnName: 'statues',
+                  label: Center(
+                    child: Text(
+                      'Statues',
                       style: textstyle,
                     ),
                   )),
@@ -146,21 +148,21 @@ class DataGridForOrder extends StatelessWidget {
               GridColumn(
                   allowFiltering: false,
                   width: 111,
-                  columnName: 'adress',
+                  columnName: 'brand',
                   label: Center(
                     child: Text(
-                      'Adress',
+                      'brand',
                       style: textstyle,
                       overflow: TextOverflow.ellipsis,
                     ),
                   )),
               GridColumn(
                   allowFiltering: true,
-                  width: 111,
-                  columnName: 'carnum',
+                  width: 190,
+                  columnName: 'complainreason',
                   label: Center(
                     child: Text(
-                      'CarNum',
+                      'Complain Reason',
                       style: textstyle,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -168,10 +170,10 @@ class DataGridForOrder extends StatelessWidget {
               GridColumn(
                   allowFiltering: true,
                   width: 130,
-                  columnName: 'statues',
+                  columnName: 'المعاينه',
                   label: Center(
                     child: Text(
-                      'Statues',
+                      'المعاينه',
                       style: textstyle,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -179,10 +181,10 @@ class DataGridForOrder extends StatelessWidget {
               GridColumn(
                   allowFiltering: false,
                   width: 111,
-                  columnName: 'location',
+                  columnName: 'action',
                   label: Center(
                     child: Text(
-                      'Location',
+                      'action',
                       style: textstyle,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -190,10 +192,10 @@ class DataGridForOrder extends StatelessWidget {
               GridColumn(
                   allowFiltering: false,
                   width: 111,
-                  columnName: 'calls',
+                  columnName: 'السحب',
                   label: Center(
                     child: Text(
-                      'calls',
+                      'السحب',
                       style: textstyle,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -201,32 +203,10 @@ class DataGridForOrder extends StatelessWidget {
               GridColumn(
                   allowFiltering: false,
                   width: 111,
-                  columnName: 'chargedamount',
+                  columnName: 'التسليم',
                   label: Center(
                     child: Text(
-                      'charged amount',
-                      style: textstyle,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  )),
-              GridColumn(
-                  allowFiltering: false,
-                  width: 111,
-                  columnName: 'resonforrejection',
-                  label: Center(
-                    child: Text(
-                      'Resons for Rejection',
-                      style: textstyle,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  )),
-              GridColumn(
-                  allowFiltering: false,
-                  width: 111,
-                  columnName: 'archived',
-                  label: Center(
-                    child: Text(
-                      'archived !',
+                      'التسليم',
                       style: textstyle,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -250,23 +230,22 @@ class DataSource extends DataGridSource {
   DataSource({required List<CustomerModel> data}) {
     _employeeData = data
         .map<DataGridRow>((e) => DataGridRow(cells: [
-              DataGridCell<int>(columnName: 'id', value: e.customer_ID),
-              DataGridCell<String>(columnName: 'orderdata', value: e.adress),
-              DataGridCell<String>(columnName: 'client', value: ""),
+              DataGridCell<int>(columnName: 'ticketnum', value: e.customer_ID),
+              DataGridCell<String>(columnName: 'date', value: e.adress),
+              DataGridCell<String>(columnName: 'statues', value: ""),
               DataGridCell<String>(
-                  columnName: 'governomate', value: "e.governomate"),
-              DataGridCell<String>(columnName: 'city', value: "e.city"),
-              DataGridCell<String>(columnName: 'adress', value: e.adress),
-              DataGridCell<int>(columnName: 'carnum', value: 5455),
-              DataGridCell<String>(columnName: 'statues', value: getstatues(e)),
+                  columnName: 'client', value: "e.governomate"),
+              DataGridCell<String>(columnName: 'governomate', value: "e.city"),
+              DataGridCell<String>(columnName: 'city', value: e.adress),
+              DataGridCell<int>(columnName: 'brand', value: 5455),
+              DataGridCell<String>(
+                  columnName: 'complainreason', value: getstatues(e)),
               DataGridCell<List<String>>(
-                  columnName: 'calls', value: e.mobilenum),
+                  columnName: 'المعاينه', value: e.mobilenum),
+              DataGridCell<String>(columnName: 'action', value: "e.payingWay"),
+              DataGridCell<double>(columnName: 'السحب', value: 010),
               DataGridCell<String>(
-                  columnName: 'Paymentmethod', value: "e.payingWay"),
-              DataGridCell<double>(columnName: 'chargedamount', value: 010),
-              DataGridCell<String>(
-                  columnName: 'resonforrejection', value: "e.cancelReason"),
-              DataGridCell<bool>(columnName: 'archived', value: false),
+                  columnName: 'التسليم', value: "e.cancelReason"),
               DataGridCell<bool>(columnName: 'archived', value: false),
             ]))
         .toList();
@@ -299,7 +278,7 @@ class DataSource extends DataGridSource {
         color: const Color.fromARGB(255, 244, 244, 244),
         cells: row.getCells().map<Widget>((e) {
           return switch (e.columnName) {
-            "id" => Row(
+            "ticketnum" => Row(
                 children: [
                   Builder(builder: (context) {
                     return TextButton(
