@@ -21,6 +21,13 @@ Future<void> main() async {
           appId: "1:106186917009:android:fcd892c86b7d3e3447ab30",
           messagingSenderId: "106186917009",
           projectId: "janson-11f24"));
+  await Firebase.initializeApp(
+      options: const FirebaseOptions(
+          databaseURL: "https://janssencrm-dc050-default-rtdb.firebaseio.com",
+          apiKey: "",
+          appId: "",
+          messagingSenderId: "710129269116",
+          projectId: "janssencrm-dc050"));
   runApp(const MyApp());
 }
 
