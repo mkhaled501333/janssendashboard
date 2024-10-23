@@ -60,6 +60,7 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
         ),
         home: Builder(builder: (context) {
+          context.read<CrmProvider>().getData();
           context.read<BlockFirebasecontroller>().getData();
           context.read<Carscontroller>().getdata();
           context.read<final_prodcut_controller>().getData();
