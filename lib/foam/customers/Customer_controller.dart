@@ -1,5 +1,6 @@
 // ignore_for_file: camel_case_types
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:janssendashboard/foam/models/moderls.dart';
@@ -15,7 +16,8 @@ class Customer_controller extends ChangeNotifier {
   }
 
   customers_From_firebase() {
-    DatabaseReference ref = FirebaseDatabase.instance.ref("customers");
+    DatabaseReference ref =
+        FirebaseDatabase.instanceFor(app: Firebase.app('2')).ref("customers");
     ref.get().then((onValue) {
       if (onValue.value != null) {
         for (var e in onValue.children) {

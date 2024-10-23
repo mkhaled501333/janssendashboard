@@ -135,7 +135,7 @@ class pont extends StatelessWidget {
             child: Column(
               children: [
                 ...p.map((e) => Text(
-                      e.date.formatt_hm() + "${e.who}",
+                      "${e.date.formatt_hm()}${e.who}",
                       style: TextStyle(
                           fontSize: MediaQuery.of(context)
                                   .removePadding()

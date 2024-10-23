@@ -18,11 +18,11 @@ class CrmView extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Cards(),
+                  const Cards(),
                   SizedBox(
                       width: MediaQuery.of(context).size.width * .38,
                       height: MediaQuery.of(context).size.height * .4,
-                      child: LineChartSample2()),
+                      child: const LineChartSample2()),
                 ],
               ),
               SizedBox(

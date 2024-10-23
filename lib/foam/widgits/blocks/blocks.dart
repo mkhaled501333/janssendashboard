@@ -107,8 +107,8 @@ class BlocksStaticks extends StatelessWidget {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text(" الاضافه",
-                          style: const TextStyle(
+                      const Text(" الاضافه",
+                          style: TextStyle(
                               color: Color.fromARGB(96, 179, 180, 180))),
                       Container(
                         decoration: const BoxDecoration(),

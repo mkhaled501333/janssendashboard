@@ -30,10 +30,10 @@ class FoamDashboard extends StatelessWidget {
                   const CartsStatistics(),
                 ],
               ),
-              Row(
+              const Row(
                 children: [
-                  const BlocksStaticks(),
-                  const RoundedSessorStatistics(),
+                  BlocksStaticks(),
+                  RoundedSessorStatistics(),
                 ],
               ),
               const Row(

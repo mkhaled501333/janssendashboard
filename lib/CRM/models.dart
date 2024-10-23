@@ -80,12 +80,14 @@ class TicketModel {
       Ticketresolved: map['Ticketresolved'] as bool,
       TicketType: map['TicketType'] as String,
       requests: List<RequstesMolel>.from(
-        (map['requests'] as List<dynamic>).map<RequstesMolel>(
+        (map['requests'] == null ? [] : map['requests'] as List<dynamic>)
+            .map<RequstesMolel>(
           (x) => RequstesMolel.fromMap(x as Map<String, dynamic>),
         ),
       ),
       calls: List<CallInfo>.from(
-        (map['calls'] as List<dynamic>).map<CallInfo>(
+        (map['calls'] == null ? [] : map['calls'] as List<dynamic>)
+            .map<CallInfo>(
           (x) => CallInfo.fromMap(x as Map<String, dynamic>),
         ),
       ),
@@ -95,7 +97,8 @@ class TicketModel {
       notes: map['notes'] as String,
       others: map['others'] as String,
       actions: List<ActionModel>.from(
-        (map['actions'] as List<dynamic>).map<ActionModel>(
+        (map['actions'] == null ? [] : map['actions'] as List<dynamic>)
+            .map<ActionModel>(
           (x) => ActionModel.fromMap(x as Map<String, dynamic>),
         ),
       ),
@@ -223,18 +226,21 @@ class CustomerModel {
     return CustomerModel(
       customer_ID: map['customer_ID'] as int,
       cusotmerName: map['cusotmerName'] as String,
-      mobilenum: List<String>.from((map['mobilenum'] as List<dynamic>)),
+      mobilenum: List<String>.from(
+          (map['mobilenum'] == null ? [] : map['mobilenum'] as List<dynamic>)),
       covernorate: map['covernorate'] as String,
       area: map['area'] as String,
       adress: map['adress'] as String,
       clientStatus: map['clientStatus'] as String,
       tickets: List<TicketModel>.from(
-        (map['tickets'] as List<dynamic>).map<TicketModel>(
+        (map['tickets'] == null ? [] : map['tickets'] as List<dynamic>)
+            .map<TicketModel>(
           (x) => TicketModel.fromMap(x as Map<String, dynamic>),
         ),
       ),
       calls: List<CallInfo>.from(
-        (map['calls'] as List<dynamic>).map<CallInfo>(
+        (map['calls'] == null ? [] : map['calls'] as List<dynamic>)
+            .map<CallInfo>(
           (x) => CallInfo.fromMap(x as Map<String, dynamic>),
         ),
       ),

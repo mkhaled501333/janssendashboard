@@ -15,6 +15,7 @@ import 'package:provider/provider.dart';
 String usermame = "";
 Future<void> main() async {
   await Firebase.initializeApp(
+      name: "1",
       options: const FirebaseOptions(
           databaseURL: "https://janson-11f24-default-rtdb.firebaseio.com",
           apiKey: "AIzaSyAkWHl9E0KfHcvf5Ifx0WVvEXuvk2URhhs",
@@ -22,6 +23,7 @@ Future<void> main() async {
           messagingSenderId: "106186917009",
           projectId: "janson-11f24"));
   await Firebase.initializeApp(
+      name: "2",
       options: const FirebaseOptions(
           databaseURL: "https://janssencrm-dc050-default-rtdb.firebaseio.com",
           apiKey: "",
@@ -68,12 +70,12 @@ class MyApp extends StatelessWidget {
         ),
         home: Builder(builder: (context) {
           context.read<CrmProvider>().getData();
-          context.read<BlockFirebasecontroller>().getData();
-          context.read<Carscontroller>().getdata();
-          context.read<final_prodcut_controller>().getData();
-          context.read<OrderController>().getData();
-          context.read<Customer_controller>().getData();
-          context.read<IndusterialSecuritycontroller>().getdata();
+          // context.read<BlockFirebasecontroller>().getData();
+          // context.read<Carscontroller>().getdata();
+          // context.read<final_prodcut_controller>().getData();
+          // context.read<OrderController>().getData();
+          // context.read<Customer_controller>().getData();
+          // context.read<IndusterialSecuritycontroller>().getdata();
           return const Scaffold(
             body: SidebarPage(),
           );

@@ -20,23 +20,23 @@ class TankLevel extends StatelessWidget {
                   bottomRight: Radius.circular(7))),
         ),
         Container(
+          height: 300,
+          width: MediaQuery.of(context).size.width * .09,
+          decoration: BoxDecoration(
+              border: Border.all(width: 2),
+              borderRadius: BorderRadius.circular(7)),
           child: const Center(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text("         60 %"),
+                Text("         60 %"),
                 Text("Total hight :400"),
                 Text("filled   :      250"),
                 Text("empyt :      150"),
               ],
             ),
           ),
-          height: 300,
-          width: MediaQuery.of(context).size.width * .09,
-          decoration: BoxDecoration(
-              border: Border.all(width: 2),
-              borderRadius: BorderRadius.circular(7)),
         ),
       ],
     );

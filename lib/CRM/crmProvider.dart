@@ -1,5 +1,8 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'dart:convert';
+
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:janssendashboard/CRM/models.dart';
@@ -151,37 +154,41 @@ class CrmProvider extends ChangeNotifier {
   }
 
   customers_From_firebase() {
-    DatabaseReference ref = FirebaseDatabase.instance.ref("customers");
+    DatabaseReference ref =
+        FirebaseDatabase.instanceFor(app: Firebase.app('2')).ref("records");
     ref.get().then((onValue) {
-      if (onValue.value != null) {
-        for (var e in onValue.children) {
-          final record = CustomerModel.fromJson(e.value.toString());
-          if (record.actions
-                  .if_action_exist(customerAction.archive_customer.getTitle) ==
-              false) {
-            customers.addAll({record.customer_id.toString(): record});
-          } else {
-            customers.addAll({record.customer_id.toString(): record});
-          }
-        }
-        print("get records data");
-        notifyListeners();
-      }
+      print(onValue.children.first.value);
+      print(CustomerModel.fromMap(
+          jsonDecode(jsonEncode(onValue.children.first.value))));
+      // if (onValue.value != null) {
+      //   for (var e in onValue.children) {
+      //     final record = CustomerModel.fromJson(e.value.toString());
+      //     if (record.actions
+      //             .if_action_exist(customerAction.archive_customer.getTitle) ==
+      //         false) {
+      //       customers.addAll({record.customer_id.toString(): record});
+      //     } else {
+      //       customers.addAll({record.customer_id.toString(): record});
+      //     }
+      //   }
+      //   print("get records data");
+      //   notifyListeners();
+      // }
     });
-    ref.onChildChanged.listen((onData) {
-      if (onData.snapshot.value != null) {
-        for (var e in onData.snapshot.children) {
-          final record = CustomerModel.fromJson(e.value.toString());
-          if (record.actions
-                  .if_action_exist(customerAction.archive_customer.getTitle) ==
-              false) {
-            customers.addAll({record.customer_id.toString(): record});
-          } else {}
-        }
-        print("get blocks data");
-        Refrsh_ui();
-      }
-    });
+    // ref.onChildChanged.listen((onData) {
+    //   if (onData.snapshot.value != null) {
+    //     for (var e in onData.snapshot.children) {
+    //       final record = CustomerModel.fromJson(e.value.toString());
+    //       if (record.actions
+    //               .if_action_exist(customerAction.archive_customer.getTitle) ==
+    //           false) {
+    //         customers.addAll({record.customer_id.toString(): record});
+    //       } else {}
+    //     }
+    //     print("get blocks data");
+    //     Refrsh_ui();
+    //   }
+    // });
   }
 
   Map<String, CustomerModel> customers = {};
