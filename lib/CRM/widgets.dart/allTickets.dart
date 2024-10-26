@@ -230,19 +230,16 @@ class DataSource extends DataGridSource {
   DataSource({required List<CustomerModel> data}) {
     _employeeData = data
         .map<DataGridRow>((e) => DataGridRow(cells: [
-              DataGridCell<int>(columnName: 'ticketnum', value: e.customer_ID),
-              DataGridCell<String>(columnName: 'date', value: e.adress),
-              const DataGridCell<String>(columnName: 'statues', value: ""),
-              const DataGridCell<String>(
-                  columnName: 'client', value: "e.governomate"),
-              const DataGridCell<String>(
-                  columnName: 'governomate', value: "e.city"),
-              DataGridCell<String>(columnName: 'city', value: e.adress),
+              DataGridCell<int>(columnName: 'ticketnum', value: 1),
+              DataGridCell<String>(columnName: 'date', value: ""),
+              DataGridCell<String>(columnName: 'statues', value: ""),
+              DataGridCell<String>(columnName: 'client', value: e.adress),
+              DataGridCell<String>(columnName: 'governomate', value: "e.city"),
+              DataGridCell<String>(columnName: 'city', value: ""),
               const DataGridCell<int>(columnName: 'brand', value: 5455),
               DataGridCell<String>(
                   columnName: 'complainreason', value: getstatues(e)),
-              DataGridCell<List<String>>(
-                  columnName: 'المعاينه', value: e.mobilenum),
+              DataGridCell<List<String>>(columnName: 'المعاينه', value: []),
               const DataGridCell<String>(
                   columnName: 'action', value: "e.payingWay"),
               const DataGridCell<double>(columnName: 'السحب', value: 010),

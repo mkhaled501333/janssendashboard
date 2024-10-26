@@ -8,147 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:janssendashboard/CRM/models.dart';
 
 class CrmProvider extends ChangeNotifier {
-  // Map<String, CustomerModel> customers = {
-  //   "1": CustomerModel(
-  //       customer_ID: 6,
-  //       cusotmerName: "cusotmerName",
-  //       mobilenum: [
-  //         "eeeeerrrrrrr",
-  //         "343434",
-  //         "44434",
-  //         "34434"
-  //             "eeeeerrrrrrr",
-  //         "343434",
-  //         "44434",
-  //         "34434"
-  //             "eeeeerrrrrrr",
-  //         "343434",
-  //         "44434",
-  //         "34434"
-  //             "eeeeerrrrrrr",
-  //         "343434",
-  //         "44434",
-  //         "34434"
-  //       ],
-  //       covernorate: "covernorate",
-  //       area: "area",
-  //       adress: "adress",
-  //       clientStatus: "clientStatus",
-  //       tickets: [],
-  //       calls: [],
-  //       lastUpdated: 677),
-  //   "wer": CustomerModel(
-  //       customer_ID: 6,
-  //       cusotmerName: "cusotmerName",
-  //       mobilenum: [],
-  //       covernorate: "covernorate",
-  //       area: "area",
-  //       adress: "adress",
-  //       clientStatus: "clientStatus",
-  //       tickets: [],
-  //       calls: [],
-  //       lastUpdated: 677),
-  //   "rer": CustomerModel(
-  //       customer_ID: 6,
-  //       cusotmerName: "cusotmerName",
-  //       mobilenum: [],
-  //       covernorate: "covernorate",
-  //       area: "area",
-  //       adress: "adress",
-  //       clientStatus: "clientStatus",
-  //       tickets: [],
-  //       calls: [],
-  //       lastUpdated: 677),
-  //   "err": CustomerModel(
-  //       customer_ID: 6,
-  //       cusotmerName: "cusotmerName",
-  //       mobilenum: [],
-  //       covernorate: "covernorate",
-  //       area: "area",
-  //       adress: "adress",
-  //       clientStatus: "clientStatus",
-  //       tickets: [],
-  //       calls: [],
-  //       lastUpdated: 677),
-  //   "errer": CustomerModel(
-  //       customer_ID: 6,
-  //       cusotmerName: "cusotmerName",
-  //       mobilenum: [],
-  //       covernorate: "covernorate",
-  //       area: "area",
-  //       adress: "adress",
-  //       clientStatus: "clientStatus",
-  //       tickets: [],
-  //       calls: [],
-  //       lastUpdated: 677),
-  //   "errerrr": CustomerModel(
-  //       customer_ID: 6,
-  //       cusotmerName: "cusotmerName",
-  //       mobilenum: [],
-  //       covernorate: "covernorate",
-  //       area: "area",
-  //       adress: "adress",
-  //       clientStatus: "clientStatus",
-  //       tickets: [],
-  //       calls: [],
-  //       lastUpdated: 677),
-  //   "errv": CustomerModel(
-  //       customer_ID: 6,
-  //       cusotmerName: "cusotmerName",
-  //       mobilenum: [],
-  //       covernorate: "covernorate",
-  //       area: "area",
-  //       adress: "adress",
-  //       clientStatus: "clientStatus",
-  //       tickets: [],
-  //       calls: [],
-  //       lastUpdated: 677),
-  //   "vc": CustomerModel(
-  //       customer_ID: 6,
-  //       cusotmerName: "cusotmerName",
-  //       mobilenum: [],
-  //       covernorate: "covernorate",
-  //       area: "area",
-  //       adress: "adress",
-  //       clientStatus: "clientStatus",
-  //       tickets: [],
-  //       calls: [],
-  //       lastUpdated: 677),
-  //   "eex": CustomerModel(
-  //       customer_ID: 6,
-  //       cusotmerName: "cusotmerName",
-  //       mobilenum: [],
-  //       covernorate: "covernorate",
-  //       area: "area",
-  //       adress: "adress",
-  //       clientStatus: "clientStatus",
-  //       tickets: [],
-  //       calls: [],
-  //       lastUpdated: 677),
-  //   "x3": CustomerModel(
-  //       customer_ID: 6,
-  //       cusotmerName: "cusotmerName",
-  //       mobilenum: [],
-  //       covernorate: "covernorate",
-  //       area: "area",
-  //       adress: "adress",
-  //       clientStatus: "clientStatus",
-  //       tickets: [],
-  //       calls: [],
-  //       lastUpdated: 677),
-  //   "tj": CustomerModel(
-  //       customer_ID: 6,
-  //       cusotmerName: "cusotmerName",
-  //       mobilenum: [],
-  //       covernorate: "covernorate",
-  //       area: "area",
-  //       adress: "adress",
-  //       clientStatus: "clientStatus",
-  //       tickets: [],
-  //       calls: [],
-  //       lastUpdated: 677),
-  // };
-
   getData() {
     customers_From_firebase();
   }
@@ -157,9 +16,20 @@ class CrmProvider extends ChangeNotifier {
     DatabaseReference ref =
         FirebaseDatabase.instanceFor(app: Firebase.app('2')).ref("records");
     ref.get().then((onValue) {
-      print(onValue.children.first.value);
-      print(CustomerModel.fromMap(
-          jsonDecode(jsonEncode(onValue.children.first.value))));
+      for (var element in onValue.children) {
+        final r = CustomerModel.fromMap(jsonDecode(jsonEncode(element.value)));
+        customers.addAll({r.customer_ID.toString(): r});
+      }
+
+      // customers.addAll({
+      //   CustomerModel.fromMap(
+      //               jsonDecode(jsonEncode(onValue.children.first.value)))
+      //           .customer_ID
+      //           .toString():
+      //       CustomerModel.fromMap(
+      //           jsonDecode(jsonEncode(onValue.children.first.value)))
+      // });
+
       // if (onValue.value != null) {
       //   for (var e in onValue.children) {
       //     final record = CustomerModel.fromJson(e.value.toString());

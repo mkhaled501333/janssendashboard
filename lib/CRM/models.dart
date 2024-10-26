@@ -867,7 +867,8 @@ class RequstesMolel {
       colsedMantananceReq: map['colsedMantananceReq'] as bool,
       colsedMantananceReqreason: map['colsedMantananceReqreason'] as String,
       actions: List<ActionModel>.from(
-        (map['actions'] as List<dynamic>).map<ActionModel>(
+        (map['actions'] == null ? [] : map['actions'] as List<dynamic>)
+            .map<ActionModel>(
           (x) => ActionModel.fromMap(x as Map<String, dynamic>),
         ),
       ),
@@ -1097,7 +1098,8 @@ class ProdcutsModel {
       companyName: map['companyName'] as String,
       prodcuts: List<String>.from((map['prodcuts'] as List<dynamic>)),
       actions: List<ActionModel>.from(
-        (map['actions'] as List<dynamic>).map<ActionModel>(
+        (map['actions'] == null ? [] : map['actions'] as List<dynamic>)
+            .map<ActionModel>(
           (x) => ActionModel.fromMap(x as Map<String, dynamic>),
         ),
       ),
@@ -1158,7 +1160,8 @@ class CallTypeModel {
       id: map['id'] as int,
       callType: map['callType'] as String,
       actions: List<ActionModel>.from(
-        (map['actions'] as List<dynamic>).map<ActionModel>(
+        (map['actions'] == null ? [] : map['actions'] as List<dynamic>)
+            .map<ActionModel>(
           (x) => ActionModel.fromMap(x as Map<String, dynamic>),
         ),
       ),
@@ -1213,7 +1216,8 @@ class ReqReasons {
       id: map['id'] as int,
       Reqreason: map['Reqreason'] as String,
       actions: List<ActionModel>.from(
-        (map['actions'] as List<dynamic>).map<ActionModel>(
+        (map['actions'] == null ? [] : map['actions'] as List<dynamic>)
+            .map<ActionModel>(
           (x) => ActionModel.fromMap(x as Map<String, dynamic>),
         ),
       ),
@@ -1330,7 +1334,8 @@ class UserModel {
       permitions: List<String>.from((map['permitions'] as List<dynamic>)),
       updatedat: map['updatedat'] as int,
       actions: List<ActionModel>.from(
-        (map['actions'] as List<dynamic>).map<ActionModel>(
+        (map['actions'] == null ? [] : map['actions'] as List<dynamic>)
+            .map<ActionModel>(
           (x) => ActionModel.fromMap(x as Map<String, dynamic>),
         ),
       ),
