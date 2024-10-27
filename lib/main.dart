@@ -123,7 +123,7 @@ class _SidebarPageState extends State<SidebarPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(_headline);
+    // print(_headline);
 
     final x = switch (_headline) {
       "foam" => FoamDashboard(),

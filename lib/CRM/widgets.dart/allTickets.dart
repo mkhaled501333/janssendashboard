@@ -3,7 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:janssendashboard/CRM/crmProvider.dart';
-import 'package:janssendashboard/CRM/models.dart';
+import 'package:janssendashboard/CRM/models/actions.dart';
+import 'package:janssendashboard/CRM/models/customer.dart';
+import 'package:janssendashboard/foam/utiles/extentions.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -31,25 +33,25 @@ class DataGridForOrder extends StatelessWidget {
           ),
           child: SfDataGrid(
             onSelectionChanged: (v, g) {
-              counter.value = _dataGridController.selectedRows.length;
-              print(_dataGridController.selectedRows.length);
+              counter.value = v.length;
+              // counter.value = _dataGridController.selectedRows.length;
+              // print(_dataGridController.selectedRows.length);
             },
             showCheckboxColumn: true,
             checkboxColumnSettings: const DataGridCheckboxColumnSettings(),
             selectionMode: SelectionMode.multiple,
-            controller: _dataGridController,
             onQueryRowHeight: (details) {
-              print(
-                  "h ${details.rowHeight} i${details.rowIndex} ${details.getIntrinsicRowHeight(details.rowIndex)}");
+              // print(
+              //     "details.rowHeight ${details.rowHeight} details.rowIndex${details.rowIndex} ${details.getIntrinsicRowHeight(details.rowIndex)}");
               return details.rowIndex == 0
                   ? 30.0
                   : details.getIntrinsicRowHeight(details.rowIndex) == 65
-                      ? 30
+                      ? 32
                       : details.getIntrinsicRowHeight(details.rowIndex) - 25;
             },
             frozenColumnsCount: 2,
             footerFrozenColumnsCount: 1,
-            source: DataSource(data: myType.customers.values.toList()),
+            source: DataSource(customers: myType.customers.values.toList()),
             columnWidthMode: ColumnWidthMode.fill,
             allowSorting: true,
             allowMultiColumnSorting: true,
@@ -64,13 +66,13 @@ class DataGridForOrder extends StatelessWidget {
             columns: <GridColumn>[
               GridColumn(
                   allowFiltering: false,
-                  width: 70,
+                  width: 77,
                   columnName: 'ticketnum',
                   label: ValueListenableBuilder<int>(
                     valueListenable: counter,
                     builder: (c, value, _) {
                       return Text(
-                        ' ticket  Num ($value)',
+                        'ticket Num($value)',
                         style: textstyle,
                       );
                     },
@@ -89,7 +91,7 @@ class DataGridForOrder extends StatelessWidget {
               GridColumn(
                   allowFiltering: false,
                   allowEditing: true,
-                  width: 80,
+                  width: 118,
                   columnName: 'statues',
                   label: Center(
                     child: Text(
@@ -191,7 +193,7 @@ class DataGridForOrder extends StatelessWidget {
                   )),
               GridColumn(
                   allowFiltering: false,
-                  width: 111,
+                  width: 120,
                   columnName: 'السحب',
                   label: Center(
                     child: Text(
@@ -202,7 +204,7 @@ class DataGridForOrder extends StatelessWidget {
                   )),
               GridColumn(
                   allowFiltering: false,
-                  width: 111,
+                  width: 120,
                   columnName: 'التسليم',
                   label: Center(
                     child: Text(
@@ -226,45 +228,74 @@ class DataGridForOrder extends StatelessWidget {
 }
 
 class DataSource extends DataGridSource {
-  /// Creates the employee data source class with required details.
-  DataSource({required List<CustomerModel> data}) {
-    _employeeData = data
-        .map<DataGridRow>((e) => DataGridRow(cells: [
-              DataGridCell<int>(columnName: 'ticketnum', value: 1),
-              DataGridCell<String>(columnName: 'date', value: ""),
-              DataGridCell<String>(columnName: 'statues', value: ""),
-              DataGridCell<String>(columnName: 'client', value: e.adress),
-              DataGridCell<String>(columnName: 'governomate', value: "e.city"),
-              DataGridCell<String>(columnName: 'city', value: ""),
-              const DataGridCell<int>(columnName: 'brand', value: 5455),
-              DataGridCell<String>(
-                  columnName: 'complainreason', value: getstatues(e)),
-              DataGridCell<List<String>>(columnName: 'المعاينه', value: []),
-              const DataGridCell<String>(
-                  columnName: 'action', value: "e.payingWay"),
-              const DataGridCell<double>(columnName: 'السحب', value: 010),
-              const DataGridCell<String>(
-                  columnName: 'التسليم', value: "e.cancelReason"),
-              const DataGridCell<bool>(columnName: 'archived', value: false),
-            ]))
-        .toList();
+  DataSource({required List<CustomerModel> customers}) {
+    final tickets = customers.expand((e) => e.tickets).toList();
+    _employeeData = tickets.map<DataGridRow>((e) {
+      final req = e.requests;
+      return DataGridRow(cells: [
+        DataGridCell<int>(columnName: 'ticketnum', value: e.ticket_Num),
+        DataGridCell<String>(
+            columnName: 'date',
+            value: e.actions
+                .get_Date_of_action(TicketAction.creat_NewTicket.getTitle)
+                .formatt_yMd()),
+        DataGridCell<bool>(columnName: 'statues', value: e.Ticketresolved),
+        DataGridCell<String>(
+            columnName: 'client',
+            value: customers
+                .firstWhere((f) => f.customer_ID == e.customer_ID)
+                .cusotmerName),
+        DataGridCell<String>(
+            columnName: 'governomate',
+            value: customers
+                .firstWhere((f) => f.customer_ID == e.customer_ID)
+                .covernorate),
+        DataGridCell<String>(
+            columnName: 'city',
+            value: customers
+                .firstWhere((f) => f.customer_ID == e.customer_ID)
+                .area),
+        DataGridCell<List<String>>(
+            columnName: 'brand',
+            value: req.map((t) => t.pfodcut.ProdcutType).toList()),
+        DataGridCell<List<String>>(
+            columnName: 'complainreason',
+            value: req.map((g) => g.reqreqson).toList()),
+        DataGridCell<List<String>>(
+            columnName: 'المعاينه',
+            value: req
+                .map((h) =>
+                    h.visited == true ? "تمت المعاينه" : "لم يتم المعاينه")
+                .toList()),
+        DataGridCell<List<String>>(
+            columnName: 'action',
+            value: req.map((b) {
+              if (b.replaceToSameModel == true) {
+                return "استبدال لنفس النوع";
+              } else if (b.replaceTosnotherModel == true) {
+                return "استبدال لنوع اخر";
+              } else {
+                return "صيانه";
+              }
+            }).toList()),
+        DataGridCell<List<String>>(
+            columnName: 'السحب',
+            value: req
+                .map((h) => h.pulled1 || h.pulled2 || h.pulled3 == true
+                    ? "تمت السحب"
+                    : "لم يتم السحب")
+                .toList()),
+        DataGridCell<List<String>>(
+            columnName: 'التسليم',
+            value: req
+                .map((h) => h.deleverd1 || h.deleverd2 || h.deleverd3 == true
+                    ? "تمت التسليم"
+                    : "لم يتم التسليم")
+                .toList()),
+        const DataGridCell<bool>(columnName: 'archived', value: false),
+      ]);
+    }).toList();
   }
-
-  String getstatues(CustomerModel e) {
-    return "";
-    // if (e.a == true) {
-    //   return "deleverd";
-    // } else if (e.canceled == true) {
-    //   return "canceld";
-    // } else {
-    //   return "inProgress";
-    // }
-  }
-//  String getlocation(OrderModel e){
-//     if(e.deleverdLocation){
-//       return "deleverd";
-//     }else if(e.canceled==true){return "canceld";}else{return "inProgress";}
-//   }
 
   List<DataGridRow> _employeeData = [];
 
@@ -292,36 +323,58 @@ class DataSource extends DataGridSource {
                   }),
                 ],
               ),
-            "location" => Builder(builder: (context) {
-                return e.value.toString() == "deleverd"
-                    ? IconButton(
-                        icon: const Icon(
-                          Icons.location_on,
-                          size: 15,
-                        ),
-                        onPressed: () {},
-                      )
-                    : const SizedBox();
-              }),
-            "calls" => Builder(builder: (context) {
-                final f = e.value as List<String>;
+            "brand" => Builder(builder: (context) {
+                final v = e.value as List<String>;
                 return Column(
-                  children: f.map((e) => Text(e.toString())).toList(),
+                  mainAxisSize: MainAxisSize.min,
+                  children: v.map((t) => Text(t)).toList(),
                 );
               }),
-            "statues" => Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 3),
-                child: switch (e.value.toString()) {
-                  "deleverd" => const Column(
-                      children: [],
-                    ),
-                  "canceld" => const SizedBox(),
-                  "inProgress" => const SizedBox(),
-                  _ => const Column(
-                      children: [],
-                    )
-                },
+            "complainreason" => Builder(builder: (context) {
+                final v = e.value as List<String>;
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: v.map((t) => Text(t)).toList(),
+                );
+              }),
+            "السحب" => Builder(builder: (context) {
+                final v = e.value as List<String>;
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: v.map((t) => Text(t)).toList(),
+                );
+              }),
+            "المعاينه" => Builder(builder: (context) {
+                final v = e.value as List<String>;
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: v.map((t) => Text(t)).toList(),
+                );
+              }),
+            "action" => Builder(builder: (context) {
+                final v = e.value as List<String>;
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: v.map((t) => Text(t)).toList(),
+                );
+              }),
+            "التسليم" => Builder(builder: (context) {
+                final v = e.value as List<String>;
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: v.map((t) => Text(t)).toList(),
+                );
+              }),
+            "statues" => SizedBox(
+                height: 20,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 3),
+                  child: switch (e.value as bool) {
+                    true => const Resolved(),
+                    _ => const Opend()
+                  },
+                ),
               ),
             _ => Container(
                 alignment: Alignment.center,
@@ -335,5 +388,73 @@ class DataSource extends DataGridSource {
               ),
           };
         }).toList());
+  }
+}
+
+class Resolved extends StatelessWidget {
+  const Resolved({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+          color: const Color.fromARGB(255, 188, 218, 172),
+          borderRadius: BorderRadius.circular(9)),
+      child: const Padding(
+        padding: EdgeInsets.symmetric(vertical: 2),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Gap(8),
+            CircleAvatar(
+              backgroundColor: Color.fromARGB(255, 115, 126, 102),
+              radius: 4,
+            ),
+            Gap(4),
+            Text(
+              "Resolved",
+              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+            ),
+            Gap(8),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class Opend extends StatelessWidget {
+  const Opend({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+          color: const Color.fromARGB(255, 241, 174, 140),
+          borderRadius: BorderRadius.circular(9)),
+      child: const Padding(
+        padding: EdgeInsets.symmetric(vertical: 2),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Gap(8),
+            CircleAvatar(
+              backgroundColor: Color.fromARGB(255, 133, 106, 87),
+              radius: 4,
+            ),
+            Gap(4),
+            Text(
+              "Opend",
+              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+            ),
+            Gap(8),
+          ],
+        ),
+      ),
+    );
   }
 }

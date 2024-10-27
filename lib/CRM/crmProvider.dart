@@ -5,7 +5,9 @@ import 'dart:convert';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:janssendashboard/CRM/models.dart';
+import 'package:janssendashboard/CRM/models/callinfo.dart';
+import 'package:janssendashboard/CRM/models/customer.dart';
+import 'package:janssendashboard/CRM/models/ticket.dart';
 
 class CrmProvider extends ChangeNotifier {
   getData() {
@@ -19,46 +21,20 @@ class CrmProvider extends ChangeNotifier {
       for (var element in onValue.children) {
         final r = CustomerModel.fromMap(jsonDecode(jsonEncode(element.value)));
         customers.addAll({r.customer_ID.toString(): r});
+        print("get customer data");
       }
-
-      // customers.addAll({
-      //   CustomerModel.fromMap(
-      //               jsonDecode(jsonEncode(onValue.children.first.value)))
-      //           .customer_ID
-      //           .toString():
-      //       CustomerModel.fromMap(
-      //           jsonDecode(jsonEncode(onValue.children.first.value)))
-      // });
-
-      // if (onValue.value != null) {
-      //   for (var e in onValue.children) {
-      //     final record = CustomerModel.fromJson(e.value.toString());
-      //     if (record.actions
-      //             .if_action_exist(customerAction.archive_customer.getTitle) ==
-      //         false) {
-      //       customers.addAll({record.customer_id.toString(): record});
-      //     } else {
-      //       customers.addAll({record.customer_id.toString(): record});
-      //     }
-      //   }
-      //   print("get records data");
-      //   notifyListeners();
-      // }
     });
-    // ref.onChildChanged.listen((onData) {
-    //   if (onData.snapshot.value != null) {
-    //     for (var e in onData.snapshot.children) {
-    //       final record = CustomerModel.fromJson(e.value.toString());
-    //       if (record.actions
-    //               .if_action_exist(customerAction.archive_customer.getTitle) ==
-    //           false) {
-    //         customers.addAll({record.customer_id.toString(): record});
-    //       } else {}
-    //     }
-    //     print("get blocks data");
-    //     Refrsh_ui();
-    //   }
-    // });
+    ref.onChildChanged.listen((onData) {
+      if (onData.snapshot.value != null) {
+        for (var element in onData.snapshot.children) {
+          final r =
+              CustomerModel.fromMap(jsonDecode(jsonEncode(element.value)));
+          customers.addAll({r.customer_ID.toString(): r});
+        }
+        print("onChildChanged customer data");
+        notifyListeners();
+      }
+    });
   }
 
   Map<String, CustomerModel> customers = {};
