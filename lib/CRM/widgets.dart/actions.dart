@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:janssendashboard/CRM/crmProvider.dart';
 import 'package:provider/provider.dart';
 
-class ComplainReasons extends StatelessWidget {
-  const ComplainReasons({
+class Actionstaken extends StatelessWidget {
+  const Actionstaken({
     super.key,
   });
 
@@ -11,8 +11,18 @@ class ComplainReasons extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<CrmProvider>(
       builder: (context, myType, child) {
-        final complainreasons =
-            myType.requests.map((e) => e.reqreqson).toSet().toList();
+        final complainreasons = myType.requests
+            .map((e) {
+              if (e.replaceToSameModel == true) {
+                return "استبدال لنفس النوع";
+              } else if (e.replaceTosnotherModel == true) {
+                return "استبدال لنوع اخر";
+              } else {
+                return "صيانه";
+              }
+            })
+            .toSet()
+            .toList();
         return Container(
           decoration: BoxDecoration(
               color: const Color.fromARGB(255, 255, 255, 255),
@@ -21,7 +31,7 @@ class ComplainReasons extends StatelessWidget {
           width: MediaQuery.of(context).size.width * .25,
           child: Column(
             children: [
-              Text("complain reasons(${complainreasons.length})",
+              Text("Action taken(${complainreasons.length})",
                   style: const TextStyle(color: Color.fromARGB(95, 0, 0, 0))),
               SingleChildScrollView(
                 child: Column(

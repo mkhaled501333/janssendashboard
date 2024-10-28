@@ -7,6 +7,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:janssendashboard/CRM/models/callinfo.dart';
 import 'package:janssendashboard/CRM/models/customer.dart';
+import 'package:janssendashboard/CRM/models/request.dart';
 import 'package:janssendashboard/CRM/models/ticket.dart';
 
 class CrmProvider extends ChangeNotifier {
@@ -40,10 +41,13 @@ class CrmProvider extends ChangeNotifier {
   Map<String, CustomerModel> customers = {};
   List<String> get phones =>
       customers.values.expand((e) => e.mobilenum).toList();
+  List<RequstesMolel> get requests => customers.values
+      .expand((e) => e.tickets.expand((r) => r.requests))
+      .toList();
   List<TicketModel> get tickets =>
       customers.values.expand((e) => e.tickets).toList();
   List<CallInfo> get ticketcalls =>
       customers.values.expand((e) => e.calls).toList();
-  get cusomercalls =>
+  List<CallInfo> get cusomercalls =>
       customers.values.expand((e) => e.tickets).expand((x) => x.calls).toList();
 }

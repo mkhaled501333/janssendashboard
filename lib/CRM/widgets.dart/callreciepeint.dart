@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:janssendashboard/CRM/crmProvider.dart';
 import 'package:provider/provider.dart';
 
-class ComplainReasons extends StatelessWidget {
-  const ComplainReasons({
+class CallRecepient extends StatelessWidget {
+  const CallRecepient({
     super.key,
   });
 
@@ -11,8 +11,10 @@ class ComplainReasons extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<CrmProvider>(
       builder: (context, myType, child) {
-        final complainreasons =
-            myType.requests.map((e) => e.reqreqson).toSet().toList();
+        final callRecepients = (myType.cusomercalls + myType.ticketcalls)
+            .map((e) => e.callRecipient)
+            .toSet()
+            .toList();
         return Container(
           decoration: BoxDecoration(
               color: const Color.fromARGB(255, 255, 255, 255),
@@ -21,13 +23,13 @@ class ComplainReasons extends StatelessWidget {
           width: MediaQuery.of(context).size.width * .25,
           child: Column(
             children: [
-              Text("complain reasons(${complainreasons.length})",
+              Text("call recipients(${callRecepients.length})",
                   style: const TextStyle(color: Color.fromARGB(95, 0, 0, 0))),
               SingleChildScrollView(
                 child: Column(
-                  children: complainreasons
-                      .map((e) => item(context, e, complainreasons.length,
-                          complainreasons.where((test) => test == e).length))
+                  children: callRecepients
+                      .map((e) => item(context, e, callRecepients.length,
+                          callRecepients.where((test) => test == e).length))
                       .toList(),
                 ),
               )

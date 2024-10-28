@@ -170,23 +170,23 @@ class DataGridForOrder extends StatelessWidget {
                     ),
                   )),
               GridColumn(
-                  allowFiltering: true,
-                  width: 130,
-                  columnName: 'المعاينه',
-                  label: Center(
-                    child: Text(
-                      'المعاينه',
-                      style: textstyle,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  )),
-              GridColumn(
                   allowFiltering: false,
                   width: 111,
                   columnName: 'action',
                   label: Center(
                     child: Text(
                       'action',
+                      style: textstyle,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  )),
+              GridColumn(
+                  allowFiltering: true,
+                  width: 130,
+                  columnName: 'المعاينه',
+                  label: Center(
+                    child: Text(
+                      'المعاينه',
                       style: textstyle,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -262,12 +262,6 @@ class DataSource extends DataGridSource {
             columnName: 'complainreason',
             value: req.map((g) => g.reqreqson).toList()),
         DataGridCell<List<String>>(
-            columnName: 'المعاينه',
-            value: req
-                .map((h) =>
-                    h.visited == true ? "تمت المعاينه" : "لم يتم المعاينه")
-                .toList()),
-        DataGridCell<List<String>>(
             columnName: 'action',
             value: req.map((b) {
               if (b.replaceToSameModel == true) {
@@ -278,6 +272,12 @@ class DataSource extends DataGridSource {
                 return "صيانه";
               }
             }).toList()),
+        DataGridCell<List<String>>(
+            columnName: 'المعاينه',
+            value: req
+                .map((h) =>
+                    h.visited == true ? "تمت المعاينه" : "لم يتم المعاينه")
+                .toList()),
         DataGridCell<List<String>>(
             columnName: 'السحب',
             value: req

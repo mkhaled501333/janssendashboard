@@ -89,29 +89,33 @@ class _LineChartSample2State extends State<LineChartSample2> {
     Widget text;
     switch (value.toInt()) {
       case 0:
-        text = const Text('1', style: style);
+        text = const Text('9', style: style);
         break;
       case 1:
-        text = const Text('2', style: style);
+        text = const Text('10', style: style);
         break;
       case 2:
-        text = const Text('3', style: style);
+        text = const Text('11', style: style);
       case 3:
-        text = const Text('4', style: style);
+        text = const Text('12', style: style);
       case 4:
-        text = const Text('5', style: style);
+        text = const Text('1', style: style);
       case 5:
-        text = const Text('5', style: style);
+        text = const Text('1', style: style);
       case 6:
-        text = const Text('6', style: style);
+        text = const Text('2', style: style);
       case 7:
-        text = const Text('7', style: style);
+        text = const Text('3', style: style);
       case 8:
-        text = const Text('8', style: style);
+        text = const Text('4', style: style);
       case 9:
-        text = const Text('9', style: style);
+        text = const Text('5', style: style);
       case 10:
-        text = const Text('10', style: style);
+        text = const Text('6', style: style);
+      case 11:
+        text = const Text('7', style: style);
+      case 12:
+        text = const Text('8', style: style);
         break;
       default:
         text = const Text('', style: style);
@@ -197,18 +201,24 @@ class _LineChartSample2State extends State<LineChartSample2> {
         border: Border.all(color: const Color.fromARGB(255, 79, 91, 100)),
       ),
       minX: 0,
-      maxX: 10,
+      maxX: 11,
       minY: 0,
-      maxY: 6,
+      maxY: 20,
       lineBarsData: [
         LineChartBarData(
           spots: const [
             FlSpot(0, 0),
-            FlSpot(2, 1),
-            FlSpot(4, 0),
-            FlSpot(6, 3),
-            FlSpot(8, 3),
-            FlSpot(10, 4),
+            FlSpot(1, 3),
+            FlSpot(2, 0),
+            FlSpot(3, 3),
+            FlSpot(4, 3),
+            FlSpot(5, 4),
+            FlSpot(6, 0),
+            FlSpot(7, 1),
+            FlSpot(8, 0),
+            FlSpot(9, 3),
+            FlSpot(10, 3),
+            FlSpot(11, 3),
           ],
           isCurved: true,
           gradient: LinearGradient(
