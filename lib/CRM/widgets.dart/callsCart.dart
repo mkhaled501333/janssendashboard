@@ -1,5 +1,9 @@
+import 'package:collection/collection.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:janssendashboard/CRM/crmProvider.dart';
+import 'package:janssendashboard/CRM/models/callinfo.dart';
+import 'package:provider/provider.dart';
 
 class AppColors {
   static const Color primary = contentColorCyan;
@@ -54,8 +58,23 @@ class _LineChartSample2State extends State<LineChartSample2> {
               top: 19,
               bottom: 0,
             ),
-            child: LineChart(
-              showAvg ? avgData() : mainData(),
+            child: Consumer<CrmProvider>(
+              builder: (context, myType, child) {
+                final calls = myType.customers.values
+                    .expand(
+                      (e) =>
+                          e.tickets
+                              .expand(
+                                (e) => e.calls,
+                              )
+                              .toList() +
+                          e.calls,
+                    )
+                    .toList();
+                return LineChart(
+                  showAvg ? avgData() : mainData(calls),
+                );
+              },
             ),
           ),
           SizedBox(
@@ -101,21 +120,17 @@ class _LineChartSample2State extends State<LineChartSample2> {
       case 4:
         text = const Text('1', style: style);
       case 5:
-        text = const Text('1', style: style);
-      case 6:
         text = const Text('2', style: style);
-      case 7:
+      case 6:
         text = const Text('3', style: style);
-      case 8:
+      case 7:
         text = const Text('4', style: style);
-      case 9:
+      case 8:
         text = const Text('5', style: style);
-      case 10:
+      case 9:
         text = const Text('6', style: style);
-      case 11:
+      case 10:
         text = const Text('7', style: style);
-      case 12:
-        text = const Text('8', style: style);
         break;
       default:
         text = const Text('', style: style);
@@ -135,14 +150,14 @@ class _LineChartSample2State extends State<LineChartSample2> {
     );
     String text;
     switch (value.toInt()) {
-      case 1:
-        text = '10K';
+      case 9:
+        text = '10';
         break;
-      case 3:
-        text = '30k';
+      case 19:
+        text = '20';
         break;
-      case 5:
-        text = '50k';
+      case 29:
+        text = '30';
         break;
       default:
         return Container();
@@ -151,7 +166,55 @@ class _LineChartSample2State extends State<LineChartSample2> {
     return Text(text, style: style, textAlign: TextAlign.left);
   }
 
-  LineChartData mainData() {
+  LineChartData mainData(List<CallInfo> calls) {
+    final a9 = calls.where(
+      (e) => e.callDate.hour == 9,
+    );
+    final a10 = calls.where(
+      (e) => e.callDate.hour == 10,
+    );
+    final a11 = calls.where(
+      (e) => e.callDate.hour == 11,
+    );
+    final a12 = calls.where(
+      (e) => e.callDate.hour == 12,
+    );
+    final a1 = calls.where(
+      (e) => e.callDate.hour == 13,
+    );
+    final a2 = calls.where(
+      (e) => e.callDate.hour == 14,
+    );
+    final a3 = calls.where(
+      (e) => e.callDate.hour == 15,
+    );
+    final a4 = calls.where(
+      (e) => e.callDate.hour == 16,
+    );
+    final a5 = calls.where(
+      (e) => e.callDate.hour == 17,
+    );
+    final a6 = calls.where(
+      (e) => e.callDate.hour == 18,
+    );
+    final a7 = calls.where(
+      (e) => e.callDate.hour == 19,
+    );
+
+    final list = [
+      a9.length.toDouble(),
+      a10.length.toDouble(),
+      a11.length.toDouble(),
+      a12.length.toDouble(),
+      a1.length.toDouble(),
+      a2.length.toDouble(),
+      a3.length.toDouble(),
+      a4.length.toDouble(),
+      a5.length.toDouble(),
+      a6.length.toDouble(),
+      a7.length.toDouble(),
+    ];
+
     return LineChartData(
       gridData: FlGridData(
         show: true,
@@ -201,25 +264,13 @@ class _LineChartSample2State extends State<LineChartSample2> {
         border: Border.all(color: const Color.fromARGB(255, 79, 91, 100)),
       ),
       minX: 0,
-      maxX: 11,
+      maxX: 10,
       minY: 0,
-      maxY: 20,
+      maxY: list.maxOrNull == null ? 0 : list.maxOrNull! * 2.0,
       lineBarsData: [
         LineChartBarData(
-          spots: const [
-            FlSpot(0, 0),
-            FlSpot(1, 3),
-            FlSpot(2, 0),
-            FlSpot(3, 3),
-            FlSpot(4, 3),
-            FlSpot(5, 4),
-            FlSpot(6, 0),
-            FlSpot(7, 1),
-            FlSpot(8, 0),
-            FlSpot(9, 3),
-            FlSpot(10, 3),
-            FlSpot(11, 3),
-          ],
+          spots:
+              list.map((e) => FlSpot(list.indexOf(e).toDouble(), e)).toList(),
           isCurved: true,
           gradient: LinearGradient(
             colors: gradientColors,

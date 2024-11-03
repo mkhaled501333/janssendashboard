@@ -1,10 +1,13 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:janssendashboard/CRM/crmProvider.dart';
 import 'package:janssendashboard/CRM/models/actions.dart';
 import 'package:janssendashboard/CRM/models/customer.dart';
+import 'package:janssendashboard/CRM/models/models.dart';
+import 'package:janssendashboard/CRM/models/ticket.dart';
 import 'package:janssendashboard/foam/utiles/extentions.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
@@ -25,6 +28,7 @@ class DataGridForOrder extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<CrmProvider>(
       builder: (context, myType, child) {
+        final data = myType.customers.values.toList();
         return SfDataGridTheme(
           data: const SfDataGridThemeData(
             gridLineStrokeWidth: 0.6,
@@ -51,7 +55,10 @@ class DataGridForOrder extends StatelessWidget {
             },
             frozenColumnsCount: 2,
             footerFrozenColumnsCount: 1,
-            source: DataSource(customers: myType.customers.values.toList()),
+            source: DataSource(
+                customers: data,
+                from: myType.pickedDateFrom ?? DateTime.now(),
+                to: myType.pickedDateTO ?? DateTime.now()),
             columnWidthMode: ColumnWidthMode.fill,
             allowSorting: true,
             allowMultiColumnSorting: true,
@@ -64,6 +71,11 @@ class DataGridForOrder extends StatelessWidget {
             gridLinesVisibility: GridLinesVisibility.horizontal,
             highlightRowOnHover: true,
             columns: <GridColumn>[
+              GridColumn(
+                visible: false,
+                label: const Text(''),
+                columnName: 'opject',
+              ),
               GridColumn(
                   allowFiltering: false,
                   width: 77,
@@ -148,7 +160,7 @@ class DataGridForOrder extends StatelessWidget {
                     ),
                   )),
               GridColumn(
-                  allowFiltering: false,
+                  allowFiltering: true,
                   width: 111,
                   columnName: 'brand',
                   label: Center(
@@ -218,7 +230,24 @@ class DataGridForOrder extends StatelessWidget {
                   allowSorting: false,
                   width: 66,
                   columnName: '',
-                  label: const Icon(Icons.settings)),
+                  label: GestureDetector(
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (c) => const AlertDialog(
+                                  content: SizedBox(
+                                    width: 100,
+                                    height: 160,
+                                    child: Column(
+                                      children: [
+                                        DatepickerFrom4(),
+                                        DatepickerTo4()
+                                      ],
+                                    ),
+                                  ),
+                                ));
+                      },
+                      child: const Icon(Icons.settings))),
             ],
           ),
         );
@@ -228,11 +257,16 @@ class DataGridForOrder extends StatelessWidget {
 }
 
 class DataSource extends DataGridSource {
-  DataSource({required List<CustomerModel> customers}) {
-    final tickets = customers.expand((e) => e.tickets).toList();
+  DataSource(
+      {required List<CustomerModel> customers,
+      required DateTime from,
+      required DateTime to}) {
+    final tickets =
+        customers.expand((e) => e.tickets).toList().filterDateBetween(from, to);
     _employeeData = tickets.map<DataGridRow>((e) {
       final req = e.requests;
       return DataGridRow(cells: [
+        DataGridCell<TicketModel>(columnName: 'opject', value: e),
         DataGridCell<int>(columnName: 'ticketnum', value: e.ticket_Num),
         DataGridCell<String>(
             columnName: 'date',
@@ -255,9 +289,9 @@ class DataSource extends DataGridSource {
             value: customers
                 .firstWhere((f) => f.customer_ID == e.customer_ID)
                 .area),
-        DataGridCell<List<String>>(
+        DataGridCell<String>(
             columnName: 'brand',
-            value: req.map((t) => t.pfodcut.ProdcutType).toList()),
+            value: req.map((t) => t.pfodcut.ProdcutType).first),
         DataGridCell<List<String>>(
             columnName: 'complainreason',
             value: req.map((g) => g.reqreqson).toList()),
@@ -268,8 +302,10 @@ class DataSource extends DataGridSource {
                 return "استبدال لنفس النوع";
               } else if (b.replaceTosnotherModel == true) {
                 return "استبدال لنوع اخر";
-              } else {
+              } else if (b.maintainace == true) {
                 return "صيانه";
+              } else {
+                return "";
               }
             }).toList()),
         DataGridCell<List<String>>(
@@ -304,6 +340,10 @@ class DataSource extends DataGridSource {
 
   @override
   DataGridRowAdapter buildRow(DataGridRow row) {
+    TicketModel rowdata = row
+        .getCells()
+        .firstWhere((e) => e.columnName == 'opject')
+        .value as TicketModel;
     return DataGridRowAdapter(
         color: const Color.fromARGB(255, 244, 244, 244),
         cells: row.getCells().map<Widget>((e) {
@@ -324,10 +364,13 @@ class DataSource extends DataGridSource {
                 ],
               ),
             "brand" => Builder(builder: (context) {
-                final v = e.value as List<String>;
                 return Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: v.map((t) => Text(t)).toList(),
+                  children: rowdata.requests
+                      .map((t) => t.pfodcut.ProdcutType)
+                      .toList()
+                      .map((t) => Text(t))
+                      .toList(),
                 );
               }),
             "complainreason" => Builder(builder: (context) {
@@ -455,6 +498,116 @@ class Opend extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class DatepickerFrom4 extends StatelessWidget {
+  const DatepickerFrom4({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    context.read<CrmProvider>().pickedDateFrom = DateTime.now();
+    return Consumer<CrmProvider>(
+      builder: (context, myType, child) {
+        return Column(
+          children: [
+            TextButton(
+                onPressed: () async {
+                  DateTime? pickedDate = await showDatePicker(
+                      context: context,
+                      initialDate: myType.pickedDateFrom,
+                      firstDate: myType.AllDatesOfOfData().min,
+                      lastDate: DateTime.now());
+
+                  if (pickedDate != null) {
+                    myType.pickedDateFrom = pickedDate;
+                    myType.Refresh_UI();
+                  } else {}
+                },
+                child: Column(
+                  children: [
+                    const Text(
+                      "من",
+                      style:
+                          TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(7),
+                      decoration: BoxDecoration(
+                          border: Border.all(width: 1, color: Colors.teal),
+                          borderRadius: BorderRadius.circular(5)),
+                      child: Text(
+                        myType.pickedDateFrom!.formatt_yMd(),
+                        style: const TextStyle(
+                            fontSize: 15,
+                            color: Color.fromARGB(255, 97, 92, 92),
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ],
+                )),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class DatepickerTo4 extends StatelessWidget {
+  const DatepickerTo4({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    // context.read<HiveDB>().pickedDateFrom = DateTime.now();
+
+    context.read<CrmProvider>().pickedDateTO = DateTime.now();
+    return Consumer<CrmProvider>(
+      builder: (context, myType, child) {
+        if (myType.pickedDateFrom!.microsecondsSinceEpoch >
+            myType.pickedDateTO!.microsecondsSinceEpoch) {
+          myType.pickedDateTO = myType.pickedDateFrom;
+        }
+        return Column(
+          children: [
+            TextButton(
+                onPressed: () async {
+                  DateTime? pickedDate = await showDatePicker(
+                      context: context,
+                      initialDate: myType.pickedDateTO!,
+                      firstDate: myType.pickedDateFrom!,
+                      lastDate: DateTime.now());
+
+                  if (pickedDate != null) {
+                    myType.pickedDateTO = pickedDate;
+                    myType.Refresh_UI();
+                  } else {}
+                },
+                child: Column(
+                  children: [
+                    const Text(
+                      "الى",
+                      style:
+                          TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(7),
+                      decoration: BoxDecoration(
+                          border: Border.all(width: 1, color: Colors.teal),
+                          borderRadius: BorderRadius.circular(5)),
+                      child: Text(
+                        myType.pickedDateTO!.formatt_yMd(),
+                        style: const TextStyle(
+                            fontSize: 15,
+                            color: Color.fromARGB(255, 97, 92, 92),
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ],
+                )),
+          ],
+        );
+      },
     );
   }
 }

@@ -38,6 +38,10 @@ class CrmProvider extends ChangeNotifier {
     });
   }
 
+  Refresh_UI() {
+    notifyListeners();
+  }
+
   Map<String, CustomerModel> customers = {};
   List<String> get phones =>
       customers.values.expand((e) => e.mobilenum).toList();
@@ -50,4 +54,10 @@ class CrmProvider extends ChangeNotifier {
       customers.values.expand((e) => e.calls).toList();
   List<CallInfo> get cusomercalls =>
       customers.values.expand((e) => e.tickets).expand((x) => x.calls).toList();
+
+  DateTime? pickedDateFrom;
+  DateTime? pickedDateTO;
+  List<DateTime> AllDatesOfOfData() {
+    return tickets.expand((e) => e.actions).map((d) => d.when).toList();
+  }
 }

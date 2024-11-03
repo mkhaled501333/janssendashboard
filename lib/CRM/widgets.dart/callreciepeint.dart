@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:janssendashboard/CRM/crmProvider.dart';
 import 'package:provider/provider.dart';
@@ -13,8 +14,9 @@ class CallRecepient extends StatelessWidget {
       builder: (context, myType, child) {
         final callRecepients = (myType.cusomercalls + myType.ticketcalls)
             .map((e) => e.callRecipient)
-            .toSet()
             .toList();
+        callRecepients.sortBy<num>(
+            (e) => callRecepients.where((test) => test == e).length);
         return Container(
           decoration: BoxDecoration(
               color: const Color.fromARGB(255, 255, 255, 255),
@@ -23,14 +25,22 @@ class CallRecepient extends StatelessWidget {
           width: MediaQuery.of(context).size.width * .25,
           child: Column(
             children: [
-              Text("call recipients(${callRecepients.length})",
-                  style: const TextStyle(color: Color.fromARGB(95, 0, 0, 0))),
-              SingleChildScrollView(
-                child: Column(
-                  children: callRecepients
-                      .map((e) => item(context, e, callRecepients.length,
-                          callRecepients.where((test) => test == e).length))
-                      .toList(),
+              SizedBox(
+                height: 20,
+                child: Text(
+                    "call recipients(${callRecepients.toSet().length})              total:${callRecepients.length}",
+                    style: const TextStyle(color: Color.fromARGB(95, 0, 0, 0))),
+              ),
+              SizedBox(
+                height: (MediaQuery.of(context).size.height * .19) - 20,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: callRecepients.reversed
+                        .toSet()
+                        .map((e) => item(context, e, callRecepients.length,
+                            callRecepients.where((test) => test == e).length))
+                        .toList(),
+                  ),
                 ),
               )
             ],
@@ -47,13 +57,16 @@ class CallRecepient extends StatelessWidget {
       children: [
         SizedBox(
           width: (MediaQuery.of(context).size.width * .23) * .3,
-          child: Text(
-            overflow: TextOverflow.ellipsis,
-            maxLines: 1,
-            tittle,
-            style: TextStyle(
-                color: const Color.fromARGB(255, 158, 158, 185),
-                fontSize: (MediaQuery.of(context).size.width * .23) * .03),
+          child: Tooltip(
+            message: tittle,
+            child: Text(
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+              tittle,
+              style: TextStyle(
+                  color: const Color.fromARGB(255, 158, 158, 185),
+                  fontSize: (MediaQuery.of(context).size.width * .23) * .03),
+            ),
           ),
         ),
         Stack(

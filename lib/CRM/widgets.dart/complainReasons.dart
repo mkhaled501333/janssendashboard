@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:janssendashboard/CRM/crmProvider.dart';
 import 'package:provider/provider.dart';
@@ -12,7 +13,9 @@ class ComplainReasons extends StatelessWidget {
     return Consumer<CrmProvider>(
       builder: (context, myType, child) {
         final complainreasons =
-            myType.requests.map((e) => e.reqreqson).toSet().toList();
+            myType.requests.map((e) => e.reqreqson).toList();
+        complainreasons.sortBy<num>(
+            (e) => complainreasons.where((test) => test == e).length);
         return Container(
           decoration: BoxDecoration(
               color: const Color.fromARGB(255, 255, 255, 255),
@@ -21,14 +24,23 @@ class ComplainReasons extends StatelessWidget {
           width: MediaQuery.of(context).size.width * .25,
           child: Column(
             children: [
-              Text("complain reasons(${complainreasons.length})",
-                  style: const TextStyle(color: Color.fromARGB(95, 0, 0, 0))),
-              SingleChildScrollView(
-                child: Column(
-                  children: complainreasons
-                      .map((e) => item(context, e, complainreasons.length,
-                          complainreasons.where((test) => test == e).length))
-                      .toList(),
+              SizedBox(
+                height: 20,
+                child: Text(
+                    "complain reasons(${complainreasons.toSet().toList().length})              total:${complainreasons.length}",
+                    style: const TextStyle(color: Color.fromARGB(95, 0, 0, 0))),
+              ),
+              SizedBox(
+                height: (MediaQuery.of(context).size.height * .19) - 20,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: complainreasons.reversed
+                        .toSet()
+                        .toList()
+                        .map((e) => item(context, e, complainreasons.length,
+                            complainreasons.where((test) => test == e).length))
+                        .toList(),
+                  ),
                 ),
               )
             ],
@@ -45,13 +57,16 @@ class ComplainReasons extends StatelessWidget {
       children: [
         SizedBox(
           width: (MediaQuery.of(context).size.width * .23) * .3,
-          child: Text(
-            overflow: TextOverflow.ellipsis,
-            maxLines: 1,
-            tittle,
-            style: TextStyle(
-                color: const Color.fromARGB(255, 158, 158, 185),
-                fontSize: (MediaQuery.of(context).size.width * .23) * .03),
+          child: Tooltip(
+            message: tittle,
+            child: Text(
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+              tittle,
+              style: TextStyle(
+                  color: const Color.fromARGB(255, 158, 158, 185),
+                  fontSize: (MediaQuery.of(context).size.width * .23) * .03),
+            ),
           ),
         ),
         Stack(

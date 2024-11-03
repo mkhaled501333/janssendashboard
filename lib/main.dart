@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 
 String usermame = "";
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
       name: "1",
       options: const FirebaseOptions(

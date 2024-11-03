@@ -2,6 +2,10 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:intl/intl.dart';
+import 'package:janssendashboard/CRM/models/actions.dart';
+import 'package:janssendashboard/CRM/models/ticket.dart';
+import 'package:janssendashboard/foam/utiles/extentions.dart';
 
 class ActionModel {
   String action;
@@ -264,5 +268,36 @@ extension C3 on List<ActionModel> {
   // return true if action exist
   bool if_action_exist(String actiontitle) {
     return where((element) => element.action == actiontitle).isNotEmpty;
+  }
+}
+
+extension C4 on List<TicketModel> {
+  List<TicketModel> filterDateBetween(DateTime from, DateTime to) {
+    return where((e) =>
+        e.actions
+                .get_Date_of_action(TicketAction.creat_NewTicket.getTitle)
+                .formatToInt() >=
+            from.formatToInt() &&
+        e.actions
+                .get_Date_of_action(TicketAction.creat_NewTicket.getTitle)
+                .formatToInt() <=
+            to.formatToInt()).toList();
+  }
+}
+
+extension Dsd on DateTime {
+  String formatt_yMd_hms() {
+    String formateeddate = DateFormat('dd-MM-yyyy hh:mm a').format(this);
+    return formateeddate;
+  }
+
+  int formatt_int() {
+    String formateeddate = DateFormat('ddMMyyyy').format(this);
+    return formateeddate.to_int();
+  }
+
+  String formatt_hms() {
+    String formateeddate = DateFormat('hh:mm:ss a').format(this);
+    return formateeddate;
   }
 }
